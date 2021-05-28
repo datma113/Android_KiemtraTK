@@ -10,7 +10,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="16dp"
         android:text="MANAGE STUDENT"
         android:textSize="30dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,10 +20,35 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcvStudent"
-        android:layout_width="413dp"
-        android:layout_height="601dp"
-        android:layout_marginTop="44dp"
+        android:layout_width="406dp"
+        android:layout_height="539dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/manage_btnAdd" />
+
+    <EditText
+        android:id="@+id/manage_edtName"
+        android:layout_width="264dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="name"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/textView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <Button
+        android:id="@+id/manage_btnAdd"
+        android:layout_width="265dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="20dp"
+        android:text="add"
+        app:layout_constraintEnd_toEndOf="@+id/manage_edtName"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/manage_edtName"
+        app:layout_constraintTop_toBottomOf="@+id/manage_edtName" />
 </androidx.constraintlayout.widget.ConstraintLayout>
