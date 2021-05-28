@@ -7,19 +7,36 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentViewHolder> {
 
     List<Student> list = new ArrayList<>();
     Context context;
     LayoutInflater inflater;
+
+    String url = "https://60ae49ae80a61f0017332eed.mockapi.io/students";
 
     public StudentAdapter(List<Student> list, Context context) {
         this.list = list;
@@ -40,6 +57,43 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
 
         holder.tvName.setText(student.getName());
         holder.tvDepartment.setText(student.getDepartment());
+
+        holder.imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StringRequest stringRequest = new StringRequest(
+                        Request.Method.PUT,
+                        url + "/" + student.getId(),
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                Toast.makeText(context, "Successfully", Toast.LENGTH_SHORT).show();
+                                list.clear();
+                                getData();
+
+                                notifyDataSetChanged();
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                ){
+                    protected Map<String, String> getParams() {
+                        HashMap map = new HashMap();
+                        map.put("name","Đạt NguyễnUp");
+                        map.put("department","KTPM14");
+                        return map;
+                    }
+                };
+                RequestQueue requestQueue = Volley.newRequestQueue(context);
+                requestQueue.add(stringRequest);
+
+
+            }
+        });
     }
 
     @Override
@@ -59,5 +113,36 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
             this.imageButton = itemView.findViewById(R.id.imgbUpdate);
             this.studentAdapter = studentAdapter;
         }
+    }
+
+    public void getData() {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i=0; i<response.length(); i++) {
+                            try {
+                                JSONObject jsonObject = (JSONObject) response.get(i);
+                                Student student = new Student(
+                                        Integer.parseInt(jsonObject.getString("id")),
+                                        jsonObject.getString("name").toString(),
+                                        jsonObject.getString("department").toString()
+                                );
+                                list.add(student);
+                                notifyDataSetChanged();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(jsonArrayRequest);
     }
 }
