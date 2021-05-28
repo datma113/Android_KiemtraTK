@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
                                         Toast.makeText(MainActivity.this, "Fail", Toast.LENGTH_SHORT).show();
                                     } else {
                                         Intent intent = new Intent(MainActivity.this, ManageStudentActivity.class);
+                                        startActivity(intent);
                                         Toast.makeText(MainActivity.this, "success", Toast.LENGTH_SHORT).show();
                                         finish();
                                     }
